@@ -55,11 +55,8 @@ GEOIP_PATH="/data/adb/box_bll/clash/GeoIP.dat"
 GEOSITE_PATH="/data/adb/box_bll/clash/GeoSite.dat"
 RULES_PATH="/data/adb/box_bll/clash/rule/"
 GIT_URL="https://api.github.com/repos/MoGuangYu/Surfing/releases/latest"
-RULES_URL_PREFIX="https://raw.githubusercontent.com/MoGuangYu/rules/main/Home/"
-RULES=("YouTube.yaml" "TikTok.yaml" "Telegram.yaml" "OpenAI.yaml" "Netflix.yaml" "Microsoft.yaml" "Google.yaml" "Facebook.yaml" "Discord.yaml" "Apple.yaml")
 
-
-CURRENT_VERSION="v13.3.6"
+CURRENT_VERSION="v13.3.7"
 TOOLBOX_URL="https://raw.githubusercontent.com/MoGuangYu/Surfing/main/box_bll/clash/Toolbox.sh"
 TOOLBOX_FILE="/data/adb/box_bll/clash/Toolbox.sh"
 
@@ -88,10 +85,10 @@ check_version() {
     if [ "$remote_version" != "$CURRENT_VERSION" ]; then
         echo "↴" 
         echo "GitHub Toolbox版本效验！"
-        echo "===================="
+        echo 
         echo "当前版本: $CURRENT_VERSION"
         echo "远程版本: $remote_version"
-        echo "===================="
+        echo 
         
         while read -r -p "是否同步更新脚本？(y/n) " update_confirmation; do
             case "$update_confirmation" in
@@ -563,25 +560,23 @@ show_menu() {
         echo
         echo "4. 更新数据库"
         echo
-        echo "5. 更新路由规则"
+        echo "5. 更新核心"
         echo
-        echo "6. 更新核心"
+        echo "6. 少儿频道"
         echo
-        echo "7. 少儿频道"
+        echo "7. 控制台面板入口"
         echo
-        echo "8. 控制台面板入口"
+        echo "8. 整合客户端更新状态"
         echo
-        echo "9. 整合客户端更新状态"
+        echo "9. 禁用/启用 更新模块"
         echo
-        echo "10. 禁用/启用 更新模块"
+        echo "10. 检查仓库最新提交"
         echo
-        echo "11. 检查仓库最新提交"
+        echo "11. 项目地址"
         echo
-        echo "12. 项目地址"
+        echo "12. 一键卸载"
         echo
-        echo "13. 一键卸载"
-        echo
-        echo "14. Exit"
+        echo "13. Exit"
         echo "——————"
         read -r choice
         case $choice in
@@ -598,21 +593,18 @@ show_menu() {
                 update_geo_database
                 ;;
             5)
-                update_rules
-                ;;
-            6)
                 update_core
                 ;;
-            7)
+            6)
                 open_telegram_group
                 ;;
-            8)
+            7)
                 show_web_panel_menu
                 ;;
-            9)
+            8)
                 integrate_magisk_update
                 ;;
-            10)
+            9)
                 if ! check_module_installed; then
                     continue
                 fi
@@ -633,7 +625,7 @@ show_menu() {
                         ;;
                 esac
                 ;;
-            11)
+            10)
                 echo "↴"
                 echo "正在检查仓库更新..."
                 all_up_to_date=true
@@ -664,13 +656,13 @@ show_menu() {
                 echo
                 echo "检测已完毕..."
                 ;;
-            12)
+            11)
                 open_project_page
                 ;;
-            13)
+            12)
                 delete_files_and_dirs
                 ;;
-            14)
+            13)
                 exit 0
                 ;;
             *)
@@ -681,7 +673,7 @@ show_menu() {
     done
 }
 
-NO_UPDATE_ENABLED=true
+NO_UPDATE_ENABLED=false
 ensure_var_path() {
     if [ ! -d "$VAR_PATH" ]; then
         mkdir -p "$VAR_PATH"
@@ -893,69 +885,12 @@ update_geo_database() {
         return
     fi
     echo "更新成功✓"
-    echo
-    echo "建议重载配置..."
     chown root:net_admin "$GEOIP_PATH" "$GEOSITE_PATH"
     if [ $? -ne 0 ]; then
         echo "设置文件权限失败！"
         return
     fi
     echo "$geo_version" > "$GEO_DATABASE_VERSION_FILE"
-}
-update_rules() {
-    if [ "$NO_UPDATE_ENABLED" = "true" ]; then
-        echo "↴"
-        echo "当前选项是禁用状态，不允许执行该操作！"
-        return
-    fi
-    
-    if [ ! -f "$MODULE_PROP" ]; then
-        echo "↴" 
-        echo "当前未安装模块！"
-        return
-    fi
-    echo "↴"
-    ensure_var_path
-    RULES_UPDATE_TIMESTAMP="${VAR_PATH}last_rules_update"    
-    if [ -f "$RULES_UPDATE_TIMESTAMP" ]; then
-        last_update=$(date -d "@$(cat $RULES_UPDATE_TIMESTAMP)" +"%Y-%m-%d %H:%M:%S")
-        echo "距离上次更新是: $last_update"
-    fi
-    echo "此操作会从 GitHub 拉取最新全部规则，是否更新？(y/n)"
-    read -r confirmation
-    if [ "$confirmation" != "y" ];then
-        echo "↴"
-        echo "操作取消！"
-        return
-    fi
-    if [ ! -d "$RULES_PATH" ];then
-
-        mkdir -p "$RULES_PATH"
-        if [ $? -ne 0 ];then
-            echo "创建规则目录失败，请检查权限！"
-            return
-        fi
-    fi
-    echo "↴"
-    echo "正在下载文件中..."
-    for rule in "${RULES[@]}"; do
-        curl -o "${RULES_PATH}${rule}" -L "${RULES_URL_PREFIX}${rule}"
-        if [ $? -ne 0 ];then
-            echo "下载 ${rule} 失败！"
-            return
-        fi
-    done
-    echo "更新成功✓"
-    echo
-    echo "建议重载配置..."
-    chown -R root:net_admin "$RULES_PATH"
-    find "$RULES_PATH" -type d -exec chmod 0755 {} \;
-
-    if [ $? -ne 0 ];then
-        echo "设置文件权限失败！"
-        return
-    fi
-    date +%s > "$RULES_UPDATE_TIMESTAMP"
 }
 show_web_panel_menu() {
     while true; do
@@ -1337,6 +1272,12 @@ delete_files_and_dirs() {
             echo "正在停止服务..."
             /data/adb/box_bll/scripts/box.service stop > /dev/null 2>&1
             sleep 1.5
+            for pid in $(pidof inotifyd); do
+            if grep -qE "box.inotify|net.inotify|ctr.inotify" /proc/${pid}/cmdline; then
+            kill ${pid}
+            fi
+            done
+            sleep 1
             echo "正在删除..."
             rm -rf "/data/adb/modules_update/Surfing/" \
                    "/data/adb/modules/Surfing/" \
