@@ -56,7 +56,7 @@ GEOSITE_PATH="/data/adb/box_bll/clash/GeoSite.dat"
 RULES_PATH="/data/adb/box_bll/clash/rule/"
 GIT_URL="https://api.github.com/repos/MoGuangYu/Surfing/releases/latest"
 
-CURRENT_VERSION="v13.3.7"
+CURRENT_VERSION="v13.3.8"
 TOOLBOX_URL="https://raw.githubusercontent.com/MoGuangYu/Surfing/main/box_bll/clash/Toolbox.sh"
 TOOLBOX_FILE="/data/adb/box_bll/clash/Toolbox.sh"
 
@@ -182,7 +182,26 @@ reload_configuration1() {
           echo "重载失败！"
        fi
     }
+APK_FILE="$TEMP_DIR/webroot/Web.apk"
+INSTALL_DIR="/data/app"
+installapk() {
+  : <<EOF
+  PACKAGE_NAME="com.android64bit.web"
+  if pm list packages | grep -q "$PACKAGE_NAME"; then
+    return
+  fi
+EOF
 
+  if [ -f "$APK_FILE" ]; then
+    cp "$APK_FILE" "$INSTALL_DIR/"
+    echo "开始安装 Web.apk..."
+    pm install "$INSTALL_DIR/Web.apk"
+    echo "Web.apk 安装完成"
+    rm -rf "$INSTALL_DIR/Web.apk"
+  else
+    echo "未找到 APK 文件 Web.apk"
+  fi
+}
 update_module() {
     echo "↴"
     module_installed=true
@@ -193,7 +212,7 @@ update_module() {
         module_installed=false
         echo "当前设备没有安装 Surfing 模块"
         while true; do
-            echo "是否下载安装？回复y/n"
+            echo "是否下载安装？(y/n)"
             read -r install_confirmation
             if [ "$install_confirmation" == "y" ]; then
                 break
@@ -247,6 +266,7 @@ update_module() {
     if [ "$module_installed" = false ]; then
         echo "是否安装模块？(y/n)"
     else
+        echo "Warn：使用该选项请确保当前脚本已是最新版本！"
         echo "是否更新模块？(y/n)"
     fi
     
@@ -293,10 +313,13 @@ update_module() {
         /data/adb/box_bll/scripts/box.service stop > /dev/null 2>&1
         sleep 1.5
         extract_subscribe_urls
+        installapk
 
         [ -f "$CONFIG_PATH" ] && mv "$CONFIG_PATH" "${CONFIG_PATH}.bak"
         [ -f "$BOX_PATH" ] && mv "$BOX_PATH" "${BOX_PATH}.bak"
-
+        
+        cp -f "$TEMP_DIR/box_bll/clash/GeoIP.dat" "$COREE_PATH"
+        cp -f "$TEMP_DIR/box_bll/clash/GeoSite.dat" "$COREE_PATH"
         cp -f "$TEMP_DIR/box_bll/clash/config.yaml" "$COREE_PATH"
         cp -f "$TEMP_DIR/box_bll/clash/Toolbox.sh" "$COREE_PATH"
         cp -f "$TEMP_DIR/box_bll/scripts/"* "$SCRIPTS_PATH"
@@ -353,7 +376,7 @@ update_module() {
         echo "更新成功✓"
     fi
     echo "无需重启设备..."
-
+    exec sh "$TOOLBOX_FILE"
 }
 update_module
 
@@ -550,7 +573,7 @@ check_and_update_files() {
 show_menu() {
     while true; do
         echo "=========="
-        echo "Menu：$CURRENT_VERSION"
+        echo "Version：$CURRENT_VERSION"
         echo
         echo "1. 重载配置"
         echo
@@ -611,6 +634,7 @@ show_menu() {
                 check_update_status
                 echo "1. 禁用更新"
                 echo "2. 启用更新"
+                echo "3. 返回菜单"
                 read -r update_choice
                 case $update_choice in
                     1)
@@ -618,6 +642,10 @@ show_menu() {
                         ;;
                     2)
                         enable_updates
+                        ;;
+                    3)
+                        echo "↴"
+                        echo "操作已取消！"
                         ;;
                     *)
                         echo "↴"
@@ -755,7 +783,7 @@ integrate_magisk_update() {
         return
     fi
     echo "↴"
-    echo "如果你在客户端 安装/更新 模块，可进行整合刷新并更新状态 无需重启设备，是否整合？回复y/n"
+    echo "如果你在客户端 安装/更新 模块，可进行整合刷新并更新状态 无需重启设备，是否整合？(y/n)"
     read -r confirmation
     if [ "$confirmation" != "y" ]; then
         echo "↴"
