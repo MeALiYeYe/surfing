@@ -175,8 +175,6 @@ dns:
     - https://doh.pub/dns-query#🌎 全球直连
     - https://dns.alidns.com/dns-query#🌎 全球直连&h3=true
   nameserver-policy:
-    "GeoSite:private":
-       - system
     "GeoSite:CN":
        - https://doh.pub/dns-query#🌎 全球直连
        - https://dns.alidns.com/dns-query#🌎 全球直连&h3=true
