@@ -1,97 +1,304 @@
-# —————————
-# 基础设置
+# 连通性检测url
+HeaCheckUrl: &HeaCheckUrl "https://www.apple.com/library/test/success.html"
+
+# 节点筛选正则
+FilterHK: &FilterHK '(?i)(港|🇭🇰|\bHK\b|hongkong|hong kong)'
+FilterTW: &FilterTW '(?i)(🇨🇳|🇹🇼|🇼🇸|台|\bTW\b|taiwan)'
+FilterSG: &FilterSG '(?i)(新|🇸🇬|sg|singapore)'
+FilterJP: &FilterJP '(?i)(日本|🇯🇵|川日|东京|大阪|泉日|埼玉|沪日|深日|\bJP\b|Japan)'
+FilterKr: &FilterKR '^(?!.*((?i)Ukraine)).*(?i)(KOR|🇰🇷|韩国|首尔|韩|韓|\bKR\b|Korea)'
+FilterUS: &FilterUS '(?i)(美|🇺🇸|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|\bUS\b|unitedstates|united states)'
+#FilterRU: &FilterRU '(?i)(🇷🇺|俄罗斯|莫斯|\bRU\b|Russia|Moscow)'
+FilterOther: &FilterOther '^(?!.*(?i)(?:🇨🇳|🇨🇳|🇹🇼|🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇰🇷|🇷🇺港|\bHK\b|Hong Kong|HongKong|hongkong|日本|川日|东京|大阪|泉日|埼玉|沪日|深日|[^-]日|\bHeaCheckUrlHeaCheckUrlJP\b|Japan|美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|\bUS\b|United States|台|新北|彰化|\bTW\b|Taiwan|\bKR\b|Korea|KOR|首尔|韩|韓|狮城|狮|新加坡|坡|\bSG\b|Singapore|俄罗斯|莫斯|\bRU\b|Russia|Moscow)).*$'
+ExcludeFilter: &ExcludeFilter '(?i)(佣金|套餐|官网|官方|售后|免翻|过期|剩余|到期|流量|更新|点外|重置|免流|优惠|超实惠|址|AFF|Direct|Days|Date)'
+FilterLowMag: &FilterLowMag '0\.\d+'           #低倍率节点
+FilterHighMag: &FilterHighMag '(?!0\.)[1-9]\d*(?:\.\d+)'            #高倍率节点
+
+# 订阅更新与测试
+Proxyer: &Proxyer
+    type: http
+    interval: 43200
+    health-check:
+      enable: true
+      url: *HeaCheckUrl
+      tolerance: 50
+      interval: 300
+      timeout: 5000
+
+# 订阅引用
+Uses: &Uses 
+    type: select
+    include-all-providers: true
+
+# 策略组引用
+Selector: &Selector
+   type: select
+   proxies: [ 免流, 直连, 自选, 香港, 台湾, 狮城, 日本, 韩国, 美国, 其他, 低倍, 高倍 ]
+
+# 延迟优选策略组
+auto: &auto
+   type: url-test 
+   url: *HeaCheckUrl
+   tolerance : 50
+   interval: 300
+   timeout : 5000
+   <<: *Uses     
+
+# 负载均衡策略组策略可选round-robin, consistent-hashing
+loads: &loads
+   type: load-balance
+   url: *HeaCheckUrl
+   interval: 300
+   strategy: sticky-sessions
+   <<: *Uses
+
+# 故障转移
+fallb: &fallb
+  type: fallback
+  url: *HeaCheckUrl
+  interval: 300
+  <<: *Uses
+
+rule-anchor:
+  # 规则类型:domain
+  dom: &dom { type: http, behavior: domain, interval: 86400 }
+  # 规则类型:classical
+  cla: &cla { type: http, behavior: classical, interval: 86400 }
+  # 规则类型:ipcidr
+  ipc: &ipc { type: http, behavior: ipcidr, interval: 86400 }
+
+# ==================================
+# 免流区
+Freec: &Freec
+  type: fallback
+  url: *HeaCheckUrl
+  interval: 300
+  proxies: [ "南京电信", "南京电信1", "广州电信", "北京电信", "北京电信1", "北京电信2", "广州联通", "广州联通1", "苏州联通", "南京联通", "保定联通", "保定联通1", "广州移动", "南京移动", "动态百度", "[钉钉]广州", "[三爱]广州", "[天翼]广州" ]
+
+baidu: &baidu
+  type: http
+  port: 443
+  skip-cert-verify: true
+  username: ''
+  password: ''
+  headers:
+    Host: 153.3.236.22:443
+    X-T5-Auth: "683556433"
+    Connection: Keep-Alive
+    User-Agent: okhttp/3.11.0 Dalvik/2.1.0 (Linux; U; Android 11; Redmi K30 5G Build/RKQ1.200826.002) baiduboxapp/11.0.5.12 (Baidu; P1 11)
+dingding: &dingding
+  type: http
+  port: 443
+  skip-cert-verify: true
+  username: ''
+  password: ''
+  headers:
+    Host: 153.3.236.22:443
+    X-T5-Auth: "683556433"
+    Connection: Keep-Alive
+    With-At: gw.alicdn.com
+sanai: &sanai
+  type: http
+  port: 443
+  username: ''
+  password: ''
+  headers:
+    Host: 153.3.236.22:443
+    X-T5-Auth: "683556433"
+    Connection: Keep-Alive
+    With-At: ltetp.tv189.com
+yunpan: &yunpan
+  type: http
+  port: 443
+  username: ''
+  password: ''
+  headers:
+    X-T5-Auth: "683556433"
+    Host: 153.3.236.22:443
+    Connection: Keep-Alive
+    With-At: download.cloud.189.cn
+
+# 锚点结束
+#######################################################################
+
+
+proxies:
+  - { name: "直连", type: direct, udp: true, ip-version: ipv4 }
+  - { name: "禁止", type: reject }
+  - { name: "DNS劫持", type: dns }
+  - { name: "动态百度", server: cloudnproxy.baidu.com, <<: *baidu }
+  - { name: "北京电信", server: 220.181.33.174, <<: *baidu }
+  - { name: "北京电信1", server: 220.181.7.1, <<: *baidu }
+  - { name: "北京电信2", server: 220.181.111.189, <<: *baidu }
+  - { name: "南京电信", server: 180.101.50.249, <<: *baidu }
+  - { name: "南京电信1", server: 180.101.50.208, <<: *baidu }
+  - { name: "广州电信", server: 14.215.182.75, <<: *baidu }
+  - { name: "苏州联通", server: 157.0.146.158, <<: *baidu }
+  - { name: "保定联通", server: 110.242.70.68, <<: *baidu }
+  - { name: "保定联通1", server: 110.242.70.69, <<: *baidu }
+  - { name: "广州联通", server: 163.177.17.6, <<: *baidu }
+  - { name: "广州联通1", server: 163.177.17.189, <<: *baidu }
+  - { name: "南京联通", server: 153.3.237.117, <<: *baidu }
+  - { name: "广州移动", server: 183.240.98.84, <<: *baidu }
+  - { name: "南京移动", server: 36.155.169.188, <<: *baidu }
+  - { name: "[钉钉]广州", server: 163.177.17.189, <<: *dingding }
+  - { name: "[三爱]广州", server: 163.177.17.189, <<: *sanai }
+  - { name: "[天翼]广州", server: 163.177.17.189, <<: *yunpan }
+
+
+proxy-providers:      
+  Sub-Store:
+    <<: *Proxyer
+    path: ./proxies/Sub-Store.yaml
+    url: http://127.0.0.1:3000/download/collection/Sub
+    exclude-filter: *ExcludeFilter
+    override:
+      udp: true
+  
+
+proxy-groups:
+#  - { name: AdBlock, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png", <<: *Selector }
+  - { name: VPN, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Server.png", <<: *Selector }
+  - { name: Emby, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png", <<: *Selector }
+  - { name: TikTok, icon: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/icon/color/tiktok.png", <<: *Selector } 
+  - { name: YouTube, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png", <<: *Selector }
+  - { name: Media, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ForeignMedia.png", <<: *Selector }
+  - { name: Ai, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/ChatGPT-green.png", <<: *Selector } 
+  - { name: Google, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/google(1).png", <<: *Selector }
+  - { name: Cloudflare, icon: "https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Cloudflare.png", <<: *Selector }
+  - { name: Telegram, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png", <<: *Selector }
+  - { name: Github, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png", <<: *Selector }
+  - { name: Microsoft, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Microsoft.png", <<: *Selector } 
+  - { name: Global, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Global.png", <<: *Selector } 
+  - { name: Domestic, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Domestic.png", <<: *Selector }  
+  - { name: Final, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png", <<: *Selector }
+  # 手动＆自动
+  - { name: 免流, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Cellular.png", <<: *Freec, hidden: true }  
+  - { name: 自选, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/MY.png", <<: *Uses, hidden: true }
+#  - { name: 自动, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Auto.png", <<: *auto }
+  # 分隔,下面是地区分组
+  # 故障转移分组(fallback)
+  - { name: 香港, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Hong_Kong.png", <<: *fallb, filter: *FilterHK, exclude-filter: *FilterLowMag, hidden: true }  
+  - { name: 台湾, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Taiwan.png", <<: *fallb, filter: *FilterTW, exclude-filter: *FilterLowMag,hidden: true } 
+  - { name: 狮城, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Singapore.png", <<: *fallb, filter: *FilterSG, exclude-filter: *FilterLowMag, hidden: true } 
+  - { name: 日本, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Japan.png", <<: *fallb, filter: *FilterJP, exclude-filter: *FilterLowMag, hidden: true }
+  - { name: 韩国, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Korea.png", <<: *fallb, filter: *FilterKR, exclude-filter: *FilterLowMag, hidden: true }  
+  - { name: 美国, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/United_States.png", <<: *fallb, filter: *FilterUS, exclude-filter: *FilterLowMag, hidden: true }
+#  - { name: 俄国, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Russia.png", <<: *fallb, filter: *FilterRU, hidden: true }
+  - { name: 其他, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/quanqiu(3).png", <<: *fallb, filter: *FilterOther, hidden: true}
+  - { name: 低倍, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(2).png", <<:  *fallb, filter: *FilterLowMag, hidden: true }
+  - { name: 高倍, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(3).png", <<: *fallb, filter: *FilterHighMag, hidden: true }
+
+
+rule-providers:
+  秋风广告规则: {<<: *dom, format: yaml, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.yaml", path: ./rules/AWAvenue.yaml}
+#  advertising: {<<: *cla, format: yaml, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Advertising/Advertising_Classical_No_Resolve.yaml", path: ./rules/advertising.yaml}
+  GoogleFCM: {<<: *cla, format: yaml, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/GoogleFCM/GoogleFCM_No_Resolve.yaml", path: ./rules/GoogleFCM.yaml}
+  
+
+rules:
+  - DST-PORT,53,DNS劫持
+  - AND,((DST-PORT,443),(NETWORK,UDP)),REJECT-DROP    # 屏蔽QUIC
+  - DOMAIN-REGEX,^ad\..*|ads\..*,REJECT-DROP
+  - DOMAIN-REGEX,^hk[a-zA-Z0-9]*\.(?:weixin|wechat)(?:\.qq)?\.(?:com|qq\.com)$,香港
+  - DOMAIN-REGEX,^sg[a-zA-Z0-9]*\.(?:weixin|wechat)(?:\.qq)?\.(?:com|qq\.com)$,狮城
+  - OR,((DOMAIN,emby.cn2gias.uk),(DOMAIN,random.ouonet.org)),Emby
+  - OR,((DOMAIN-KEYWORD,linkeless),(DOMAIN-KEYWORD,sntp),(DOMAIN-KEYWORD,ouoboom)),VPN
+  - DOMAIN-SUFFIX,metacubex.one,Global
+  - DOMAIN,board.zash.run.place,Global
+  
+  - RULE-SET,秋风广告规则,REJECT-DROP
+#  - RULE-SET,advertising,REJECT-DROP 
+  - RULE-SET,GoogleFCM,Domestic
+
+  - GEOSITE,private,直连
+  - GEOSITE,category-ads-all,REJECT-DROP
+  - GEOSITE,category-httpdns-cn,REJECT-DROP
+  - GEOSITE,win-spy,REJECT-DROP
+  - GEOSITE,win-update,REJECT-DROP
+  - GEOSITE,win-extra,REJECT-DROP
+  - GEOSITE,youtube,YouTube
+  - GEOSITE,tiktok,TikTok
+  - GEOSITE,category-media,Media
+  - GEOSITE,google,Google
+  - GEOSITE,cloudflare,Cloudflare
+  - GEOSITE,telegram,Telegram
+  - GEOSITE,category-ai-chat-!cn,Ai
+  - GEOSITE,github,Github
+  - GEOSITE,bing,Microsoft
+  - GEOSITE,onedrive,Microsoft
+  - GEOSITE,microsoft,Microsoft
+  - GEOSITE,geolocation-!cn,Global
+  - GEOSITE,aliyun,直连
+  - GEOSITE,alibaba,直连
+  - GEOSITE,tencent,直连
+  - GEOSITE,category-ai-cn,直连
+  - GEOSITE,category-bank-cn,直连
+  - GEOSITE,chinatelecom,直连
+  - GEOSITE,chinaunicom,直连
+  - GEOSITE,chinamobile,直连
+  - GEOSITE,cn,Domestic 
+   
+  - GEOIP,private,直连,no-resolve
+  - GEOIP,cloudflare,Cloudflare,no-resolve
+  - GEOIP,google,Google,no-resolve
+  - GEOIP,telegram,Telegram,no-resolve
+  - GEOIP,CN,Domestic,no-resolve
+ 
+  - MATCH,Final
+  - NETWORK,udp,REJECT-DROP
+
+
+#####################
+#通用配置
 mixed-port: 7890
 redir-port: 7891
 tproxy-port: 1536
-ipv6: true
-mode: Rule
+mode: rule
 allow-lan: true
-geodata-mode: true
-geo-auto-update: true
-geo-update-interval: 24
-geox-url:
-  asn: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb"
-  geoip: "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat"
-  geosite: "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat"
-global-ua: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36
+ipv6: false
 unified-delay: true
 tcp-concurrent: true
+enable-process: true
 log-level: silent
-find-process-mode: always
+
+geodata-mode: true     #true时geoip.文件为dat格式，false时为mmdb格式
+geodata-loader: standard
+geo-auto-update: true
+geo-update-interval: 168
+geox-url:
+  geoip: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat"
+  geosite: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
+  mmdb: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/country.mmdb"
+  asn: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb"
+
+#匹配进程
+find-process-mode: strict
+keep-alive-idle: 3600
+keep-alive-internal: 15
 global-client-fingerprint: chrome
+
+#控制面板
 external-controller: 0.0.0.0:9090
-#面板默认 Meta 可选 Yacd / Zash 重启模块即可加载
-external-ui: /data/adb/box_bll/panel/Zash/ # 主推zash
+#面板默认Meta 可选Yacd 清除浏览器缓存即可重新加载
+external-ui: ../panel/Zash/ #/Meta #/Yacd
+external-ui-name: zash
 secret: ""
-# —————————
-# ==== Tips
 
-# 1. 修改配置文件保存时，建议重启服务/重载配置.
-# 2. 如遇代理组图标无法显示，确保Tun保持开启状态下，您可先尝试 关闭/开启网络
-# 3. 启动Webapk可检查是否能访问上 raw.githubusercontent.com 如无提示即通过
-# —————————
-
-
-# 健康检查
-p: &p
-  type: http
-  interval: 86400
-  health-check:
-    enable: true
-    url: https://www.gstatic.com/generate_204
-    interval: 300
-  header:
-      User-Agent:
-      - "mihomo/1.19.3"
-      - "clash.meta"
-# —————————
-
-# 订阅地址相关
-A: &A
-  filter: "^(?!.*(套餐|重置|剩余|到期|订阅|群|账户|流量|有效期|时间|官网|失联|余额)).*$"
-  use:
-  - 1.主要地址
-  - 2.备用地址
-  - 3.额外地址
-
-All: &All
-  type: url-test
-  use:
-  - 1.主要地址
-  - 2.备用地址
-  - 3.额外地址
-
-proxy-providers: # ← 此函数位置请勿变动！此为模块更新时备份恢复订阅变量范围 ↓
-  1.主要地址:
-    <<: *p
-    override:
-      additional-prefix: "Main："
-    path: ./proxies/1.主要地址.yaml
-    url: "引入您的Clash订阅链接地址"
-
-  2.备用地址:
-    <<: *p
-    override:
-      additional-prefix: "Minor："
-    path: ./proxies/2.备用地址.yaml
-    url: "引入您的Clash订阅链接地址"
-
-  3.额外地址:
-    <<: *p
-    override:
-      additional-prefix: "Additi："
-    path: ./proxies/3.额外地址.yaml
-    url: "引入您的Clash订阅链接地址"
-
-# —————————
-
-# 节点记忆
-profile: # ← 此函数位置请勿变动！此为模块更新时备份恢复订阅变量范围 ↑
+#策略组选择和fake-ip缓存
+profile:
   store-selected: true
   store-fake-ip: true
-# —————————
+  
+# 自动同步时间以防止时间不准导致无法正常联网
+ntp:
+  enable: true
+  # 是否同步至系统时间，需要 root/管理员权限
+  write-to-system: false
+  server: time.apple.com
+  port: 123
+  interval: 30
 
-# 嗅探模块
 sniffer:
   enable: true
   force-dns-mapping: true
@@ -108,46 +315,23 @@ sniffer:
     - "+.v2ex.com"
   skip-domain:
     - "Mijia Cloud"
-# —————————
+    - "dlg.io.mi.com"
 
-# 网卡模块
-# ==== Tips
-# 1. Tp无法劫持发往局域网的请求，也会导致WebRTC地址泄露DNS会有劫持抢答风险
 tun:
-  enable: true #true 开 #false 关 # 防止地址泄露此项必须开启
-  device: meta
-  stack: gvisor
+  enable: false
+  device: Mihomo
+  stack: mixed
   dns-hijack:
-    - any:53
-    - tcp://any:53
-  udp-timeout: 300
+    - "any:53"
+    - "tcp://any:53"
   auto-route: true
   strict-route: true
   auto-redirect: false
   auto-detect-interface: true
   route-exclude-address:
     - 192.168.0.0/16
-    - 10.0.0.0/8
-    - 172.16.0.0/12
-    - 100.64.0.0/10
     - fc00::/7
-    - fe80::/10
-  exclude-package: # 游戏卡顿可添加包名 仅Android
-    #- com.tencent.tmgp.sgame
-    # _____________________# 三星专供 ↓ 范围
-#    - com.samsung.android.messaging
-#    - com.samsung.android.app.telephonyui
-#    - com.samsung.android.dialer
-#    - com.samsung.android.incallui
-#    - com.samsung.android.smartcallprovider
-#    - com.samsung.android.intellivoiceservice
-#    - com.android.settings
-#    - com.qti.qcc
-#    - com.sec.epdg
-#    - com.sec.imsservice # 三星专供 ↑ 范围
-    # 非三星用户不必理会，三星用户可自行取消注释
-    
-# —————————
+  exclude-package: #
 
 hosts:
   raw.githubusercontent.com:
@@ -160,203 +344,35 @@ hosts:
     - 2606:50c0:8002::154
     - 2606:50c0:8003::154
 
-# DNS模块
-# 解析不懂别瞎改养蛊 已最优解，你再怎么折腾也是没啥卵用
 dns:
   enable: true
-  ipv6: true
-  listen: 0.0.0.0:1053
+  prefer-h3: true
+  listen: :1053
+  ipv6: false
+  default-nameserver:
+    - 223.5.5.5
+    - 223.6.6.6
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.0/15
   fake-ip-filter:
-    - "GeoSite:CN,private"
-    - "localhost.ptlogin2.qq.com"
-  proxy-server-nameserver:
-    - https://doh.pub/dns-query#🌎 全球直连
-    - https://dns.alidns.com/dns-query#🌎 全球直连&h3=true
+    - 'geosite:private,cn'
+    - localhost.ptlogin2.qq.com
   nameserver-policy:
-    "GeoSite:CN":
-       - https://doh.pub/dns-query#🌎 全球直连
-       - https://dns.alidns.com/dns-query#🌎 全球直连&h3=true
+    'geosite:category-ads-all': rcode://success
+    'geosite:geolocation-!cn':
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
+    'geosite:jd,tencent,meituan,zhihu,huya,douyu,bilibili,pinduoduo':
+      - https://doh.pub/dns-query
+    'geosite:aliyun,alibaba,alibabacloud,netease,eleme,sina':
+      - https://dns.alidns.com/dns-query
+    'geosite:bytedance,tiktok':
+      - 180.184.1.1
+      - 180.184.2.2
+    'geosite:private,cn':
+      - https://dns.alidns.com/dns-query
   nameserver:
-    - https://dns.google/dns-query#DNS解析&h3=true
-    - https://cloudflare-dns.com/dns-query#DNS解析&h3=true
-# —————————
-
-proxies:
-  - {name: 🌎 全球直连, type: direct, udp: true}
-  - {name: ⛔️ 拒绝连接, type: reject}
-  - {name: 🌐 DNS_Hijack, type: dns}
-
-proxy_groups: &proxy_groups
-    type: select
-    proxies:
-      - 总模式
-      - ⛔️ 拒绝连接
-      - 延迟最低
-      - 故障转移
-      - 负载均衡
-      - 香港节点
-      - 台湾节点
-      - 狮城节点
-      - 日本节点
-      - 美国节点
-      - 其它地区
-      - 🌎 全球直连
-    <<: *A
-# —————————
-proxy-groups:
-  - name: 总模式
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/All.svg"
-    type: select
-    proxies:
-      - 延迟最低
-      - 故障转移
-      - 负载均衡
-      - 香港节点
-      - 台湾节点
-      - 狮城节点
-      - 日本节点
-      - 美国节点
-      - 其它地区
-      - 🌎 全球直连
-# —————————
-
-  - name: Telegram
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Telegram.svg"
-    <<: *proxy_groups
-    
-  - name: Apple
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Apple.svg"
-    <<: *proxy_groups
-    
-  - name: Microsoft
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Microsoft.svg"
-    <<: *proxy_groups
-
-  - name: OpenAI
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/OpenAI.svg"
-    <<: *proxy_groups
-
-  - name: Discord
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Discord.svg"
-    <<: *proxy_groups
-
-  - name: TikTok
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/TikTok.svg"
-    <<: *proxy_groups
-
-  - name: YouTube
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/YouTube.svg"
-    <<: *proxy_groups
-
-  - name: Netflix
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Netflix.svg"
-    <<: *proxy_groups
-
-  - name: Facebook
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Facebook.svg"
-    <<: *proxy_groups
-
-  - name: Google
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Google.svg"
-    <<: *proxy_groups
-
-  - name: GoogleFCM
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/GoogleFCM.svg"
-    <<: *proxy_groups
-
-  - name: GitHub
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/GitHub.svg"
-    <<: *proxy_groups
-
-  - name: Twitter(X)
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Twitter.svg"
-    <<: *proxy_groups
-
-  - name: DNS解析
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/DNS.svg"
-    <<: *proxy_groups
-
-  - name: 漏网之鱼
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/HBASE-copy.svg"
-    <<: *proxy_groups
-
-  - name: 广告拦截
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/No-ads-all.svg"
-    type: select
-    proxies:
-      - ⛔️ 拒绝连接
-      - 🌎 全球直连
-      - REJECT-DROP
-      - PASS #匹配规则
-
-  - name: 延迟最低
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Return.svg"
-    type: url-test
-    <<: *A
-
-  - name: 故障转移
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Return.svg"
-    type: fallback
-    <<: *A
-
-  - name: 负载均衡
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Return.svg"
-    type: load-balance
-    strategy: round-robin
-    <<: *A
-
-  - name: 台湾节点
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/CN.svg"
-    filter: "^(?=.*(台|新北|彰化|TW|Taiwan)).*$"
-    <<: *All
-
-  - name: 香港节点
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/HK.svg"
-    filter: "^(?=.*(港|HK|hk|Hong Kong|HongKong|hongkong)).*$"
-    <<: *All
-
-  - name: 日本节点
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/JP.svg"
-    filter: "^(?=.*(日本|川日|东京|大阪|泉日|埼玉|沪日|深日|[^-]日|JP|Japan)).*$"
-    <<: *All
-
-  - name: 美国节点
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/US.svg"
-    filter: "^(?=.*(美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States)).*$"
-    <<: *All
-
-  - name: 狮城节点
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Singapore.svg"
-    filter: "^(?=.*(新加坡|坡|狮城|SG|Singapore)).*$"
-    <<: *All
-
-  - name: 其它地区
-    icon: "https://raw.githubusercontent.com/MoGuangYu/Surfing/refs/heads/rm/Home/icon/Globe.svg"
-    filter: "^(?!.*(港|HK|hk|Hong Kong|HongKong|hongkong|日本|川日|东京|大阪|泉日|埼玉|沪日|深日|[^-]日|JP|Japan|美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States|台|新北|彰化|TW|Taiwan|新加坡|坡|狮城|SG|Singapore|灾|网易|Netease|套餐|重置|剩余|到期|订阅|群|账户|流量|有效期|时间|官网)).*$"
-    <<: *All
-# —————————
-
-rules:
-  - DST-PORT,53,🌐 DNS_Hijack
-  - GeoSite,category-ads-all,广告拦截
-  - GeoSite,Twitter,Twitter(X)
-  - GeoSite,GitHub,GitHub
-  - GeoSite,Discord,Discord
-  - GeoSite,TikTok,TikTok
-  - GeoSite,YouTube,YouTube
-  - GeoSite,Netflix,Netflix
-  - GeoSite,Facebook,Facebook
-  - GeoSite,OpenAI,OpenAI
-  - GeoSite,GoogleFCM,GoogleFCM
-  - GeoSite,Google,Google
-  - GeoSite,Apple,Apple
-  - GeoSite,Microsoft,Microsoft
-  - GeoSite,Telegram,Telegram
-  - GeoSite,CN,🌎 全球直连
-  - GeoSite,private,🌎 全球直连,no-resolve
-  - GeoIP,CN,🌎 全球直连
-  - GeoIP,private,🌎 全球直连,no-resolve
-  - MATCH,漏网之鱼
-# —————————
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  proxy-server-nameserver:
+    - https://dns.alidns.com/dns-query
