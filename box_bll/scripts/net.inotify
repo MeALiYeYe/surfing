@@ -13,7 +13,6 @@ export TZ
 
 log_file="${run_path}/net_rules.log"
 TMP_DIR="/dev/tmp"
-BOOT_STABLE_FLAG="${TMP_DIR}/boot_stable.flag"
 RULES_ADD_FLAG="${TMP_DIR}/rules_add_executed.flag"
 
 [ ! -d "$TMP_DIR" ] && mkdir -p "$TMP_DIR"
@@ -41,34 +40,14 @@ rules_add() {
 }
 
 if [ "$events" = "w" ]; then
-    if [ -f "$BOOT_STABLE_FLAG" ]; then
-        last_exec_time=$(stat -c %Y "$BOOT_STABLE_FLAG")
-        current_time=$(date +%s)
-        time_diff=$((current_time - last_exec_time))
-
-        if [ "$time_diff" -lt 30 ]; then
-            exit 0
-        fi
-    fi
-
-    sleep 3
     echo "$(date +"[%Y年%m月%d日 %H:%M:%S %Z]") [Info]: 网络发生变化，开始重新执行规则..." >> "$log_file"
     rules_add
-
+    sleep 1
     if [ "$ipv6" = "disable" ]; then
         disable_ipv6
     fi
 fi
 
-if [ "$uptime_sec" -lt 360 ] && [ ! -f "$BOOT_STABLE_FLAG" ]; then
-
-    echo "$(date +"[%Y年%m月%d日 %H:%M:%S %Z]") [Info]: 系统刚启动，等待网络接口稳定..." >> "$log_file"
-    sleep 60
-    
-    echo "$(date +"[%Y年%m月%d日 %H:%M:%S %Z]") [Info]: 开始执行防火墙规则..." >> "$log_file"
-    rules_add
-    touch "$BOOT_STABLE_FLAG"
-fi
 
 if [ ! -f "/data/adb/modules/Surfing/disable" ]; then
     if [ -f "$RULES_ADD_FLAG" ]; then
