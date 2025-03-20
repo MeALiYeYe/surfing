@@ -1,3 +1,4 @@
+chmod ugo+x /data/adb/box_bll/scripts/*
 #!/bin/sh
 
 SKIPUNZIP=1
@@ -62,10 +63,13 @@ restore_subscribe_urls() {
 }
 
 installapk() {
+  : <<EOF
   PACKAGE_NAME="com.android64bit.web"
   if pm list packages | grep -q "$PACKAGE_NAME"; then
     return
   fi
+EOF
+
   if [ -f "$APK_FILE" ]; then
     cp "$APK_FILE" "$INSTALL_DIR/"
     ui_print "- 开始安装 Web.apk..."
@@ -102,6 +106,9 @@ if [ -d /data/adb/box_bll ]; then
     ui_print "- 用户配置 box.config 已备份 bak"
   fi
 
+  cp -f "$MODPATH/box_bll/clash/GeoIP.dat" /data/adb/box_bll/clash/
+  cp -f "$MODPATH/box_bll/clash/GeoSite.dat" /data/adb/box_bll/clash/
+  cp -f "$MODPATH/box_bll/clash/GeoSite.dat" /data/adb/box_bll/clash/
   cp -f "$MODPATH/box_bll/clash/config.yaml" /data/adb/box_bll/clash/
   cp -f "$MODPATH/box_bll/clash/Toolbox.sh" /data/adb/box_bll/clash/
   cp -f "$MODPATH/box_bll/scripts/"* /data/adb/box_bll/scripts/
