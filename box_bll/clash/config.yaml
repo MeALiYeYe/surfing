@@ -132,12 +132,10 @@ proxy-groups:
   - { name: Github, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png", <<: *Proxy_groups }
   - { name: Microsoft, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Microsoft.png", <<: *Proxy_groups } 
   - { name: Global, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Global.png", <<: *Proxy_groups }
-  - { name: DomesticMedia, icon: "https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/DomesticMedia.png", <<: *Proxy_groups }
   - { name: Domestic, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Domestic.png", <<: *Proxy_groups }  
   - { name: Final, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png", <<: *Proxy_groups }
   # 手动＆自动  
   - { name: 自选, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/MY.png", <<: *Selector, hidden: true }
-  - { name: 免流, icon: "https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Cellular.png", <<: *Freec, hidden: true }
 #  - { name: 自动, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Auto.png", <<: *auto }
   # 分隔,下面是地区分组
   # 故障转移分组(fallback)
@@ -173,12 +171,6 @@ rules:
   - AND,((DST-PORT,443),(NETWORK,UDP)),REJECT-DROP   # 屏蔽QUIC 
 
   - DOMAIN-REGEX,^ad\..*|ads\..*,REJECT-DROP
-  - DOMAIN-REGEX,^hk[a-zA-Z0-9]*\.(?:weixin|wechat)(?:\.qq)?\.(?:com|qq\.com)$,香港
-  - DOMAIN-REGEX,^sg[a-zA-Z0-9]*\.(?:weixin|wechat)(?:\.qq)?\.(?:com|qq\.com)$,狮城
-  - OR,((DOMAIN,emby.cn2gias.uk),(DOMAIN,random.ouonet.org)),Emby
-  - OR,((DOMAIN-KEYWORD,linkeless),(DOMAIN-KEYWORD,sntp),(DOMAIN-KEYWORD,ouo),(DOMAIN-KEYWORD,cauenvao)),VPN
-  - DOMAIN-SUFFIX,metacubex.one,Global
-  - DOMAIN,board.zash.run.place,Global
   
 #  - RULE-SET,advertising,REJECT-DROP
 #  - RULE-SET,秋风广告规则,REJECT-DROP 
@@ -205,13 +197,6 @@ rules:
   - GEOSITE,onedrive,Microsoft
   - GEOSITE,microsoft,Microsoft
   - GEOSITE,geolocation-!cn,Global
-  - GEOSITE,bilibili,DomesticMedia
-  - GEOSITE,bytedance,DomesticMedia
-  - GEOSITE,douyu,DomesticMedia
-  - GEOSITE,huya,DomesticMedia
-  - GEOSITE,sina,DomesticMedia
-  - GEOSITE,zhihu,DomesticMedia
-  - GEOSITE,category-entertainment-cn,DomesticMedia
   - GEOSITE,cn,Domestic 
    
   - GEOIP,private,直连,no-resolve
