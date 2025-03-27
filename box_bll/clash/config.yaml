@@ -35,10 +35,12 @@ Proxyer: &Proxyer
       interval: 300
       timeout: 5000
 
-# 订阅引用
+# 订阅引用，引入Sub Store订阅或机场订阅Url
 Uses: &Uses 
     use: 
-      - Sub-Store
+#      - Sub-Store
+      - *Sub1
+      - *Sub2
     exclude-filter: *ExcludeFilter
 
 # 策略组引用
@@ -94,13 +96,18 @@ proxies:
   - { name: "DNS劫持", type: dns }
 
 
-proxy-providers:              
+proxy-providers:
+#  Sub-Store:
+#    <<: *Proxyer
+#    path: ./proxies/Sub-Store.yaml
+#    url: http://127.0.0.1:3000/download/collection/Sub
+#    override:
+#      udp: true
+
   *Sub1:
     <<: *Proxyer
     path: ./proxies/Sub1.yaml
     url: *Sub1Url
-#    filter: '0[xX×]'
-    exclude-filter: *ExcludeFilter
     override:
       udp: true
       additional-prefix: *Sub1
@@ -109,8 +116,6 @@ proxy-providers:
     <<: *Proxyer
     path: ./proxies/Sub2.yaml
     url: *Sub2Url
-#    filter: *FilterAll
-    exclude-filter: *ExcludeFilter
     override:
       udp: true
       additional-prefix: *Sub2
