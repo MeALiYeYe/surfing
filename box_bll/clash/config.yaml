@@ -1,15 +1,15 @@
 # ===================================
 # 锚点开始
 # 订阅名和订阅链接、图标
-Sub1: &Sub1 "订阅1"
-Sub1Icon: &Sub1Icon "订阅1图标"
-Sub1Url: &Sub1Url "订阅1链接"
-Sub2: &Sub2 "订阅2"
-Sub2Icon: &Sub2Icon "订阅2图标"
-Sub2Url: &Sub2Url "订阅2链接"
+#Sub1: &Sub1 "订阅1"
+#Sub1Icon: &Sub1Icon "订阅1图标"
+#Sub1Url: &Sub1Url "订阅1链接"
+#Sub2: &Sub2 "订阅2"
+#Sub2Icon: &Sub2Icon "订阅2图标"
+#Sub2Url: &Sub2Url "订阅2链接"
 
 # Sub Store(组合)订阅Url
-# SubStoreUrl: &SubStoreUrl "http://127.0.0.1:3000/download/collection/Sub"
+SubStoreUrl: &SubStoreUrl "http://127.0.0.1:3000/download/collection/Sub"
 
 # 连通性检测url
 HeaCheckUrl: &HeaCheckUrl "https://www.apple.com/library/test/success.html"
@@ -41,9 +41,9 @@ Proxyer: &Proxyer
 # 订阅引用，引入Sub Store订阅或机场订阅Url
 Uses: &Uses 
   use: 
-#    - Sub-Store
-    - *Sub1
-    - *Sub2
+    - Sub-Store
+#    - *Sub1
+#    - *Sub2
   exclude-filter: *ExcludeFilter
 
 # 策略组引用
