@@ -1,12 +1,12 @@
 # ===================================
 #锚点开始
 #订阅名和订阅链接、图标
-Sub1: &Sub1 "订阅名"
-Sub1Icon: &Sub1Icon "订阅图标"
-Sub1Url: &Sub1Url "订阅链接"
-Sub2: &Sub2 "订阅名"
-Sub2Url: &Sub2Url "订阅图标"
-Sub2Icon: &Sub2Icon "订阅链接"
+Sub1: &Sub1 "订阅1"
+Sub1Icon: &Sub1Icon "订阅1图标"
+Sub1Url: &Sub1Url "订阅1链接"
+Sub2: &Sub2 "订阅2"
+Sub2Url: &Sub2Url "订阅2图标"
+Sub2Icon: &Sub2Icon "订阅2链接"
 
 # 连通性检测url
 HeaCheckUrl: &HeaCheckUrl "https://www.apple.com/library/test/success.html"
@@ -70,7 +70,7 @@ loads: &loads
    strategy: sticky-sessions
    <<: *Uses
 
-# 故障转移
+# 故障转移策略组
 fallb: &fallb
   type: fallback
   url: *HeaCheckUrl
@@ -87,15 +87,17 @@ rule-anchor:
 
 # ==================================
 #锚点结束
-###############
+###################################
 
 
+#出战代理
 proxies:
   - { name: "直连", type: direct, udp: true }
   - { name: "禁止", type: reject }
   - { name: "DNS劫持", type: dns }
 
 
+# 订阅集合
 proxy-providers:
 #  Sub-Store:
 #    <<: *Proxyer
@@ -121,6 +123,7 @@ proxy-providers:
       additional-prefix: *Sub2
   
 
+# 代理组
 proxy-groups:
   - { name: VPN, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Server.png", <<: *Proxy_groups }
   - { name: Emby, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png", <<: *Proxy_groups }
@@ -167,10 +170,13 @@ proxy-groups:
     hidden: true
     
 
+# 规则集
 rule-providers:
 #  秋风广告规则: { <<: *dom, format: yaml, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.yaml", path: ./rules/AWAvenue.yaml }
 #  advertising: { <<: *cla, format: yaml, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Advertising/Advertising_Classical_No_Resolve.yaml", path: ./rules/advertising.yaml } 
 
+
+# 路由规则
 rules:
   - DST-PORT,53,DNS劫持
   - AND,((DST-PORT,443),(NETWORK,UDP)),REJECT-DROP   # 屏蔽QUIC 
@@ -215,6 +221,7 @@ rules:
 
   - MATCH,Final
 
+
 #####################
 #通用配置
 mixed-port: 7890
@@ -243,12 +250,14 @@ external-ui: ../panel/Zash/ # 主推zash
 external-ui-url: "https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip"
 secret: ""
 
+
 # 策略组选择和fake-ip缓存
 profile:
   store-selected: true
   store-fake-ip: true
 
-# 嗅探模块
+
+# 域名嗅探模块
 sniffer:
   enable: true
   force-dns-mapping: true
@@ -279,9 +288,9 @@ sniffer:
     - "10.0.0.0/8"
     - "172.16.0.0/12"
     - "fc00::/7"
-# —————————
 
-# 网卡模块
+
+# 虚拟网卡模块
 tun:
   enable: true
   device: Mihomo
@@ -303,6 +312,8 @@ tun:
     - fe80::/10
   exclude-package: # 游戏卡顿可添加包名
 
+
+# hosts模块
 hosts:
   raw.githubusercontent.com:
     - 185.199.109.133
@@ -312,6 +323,7 @@ hosts:
     - 2606:50c0:8000::154
     - 2606:50c0:8001::154
     - 2606:50c0:8002::154
+
 
 # DNS模块
 dns:
