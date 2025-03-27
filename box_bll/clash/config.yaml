@@ -44,7 +44,7 @@ Uses: &Uses
 #    - Sub-Store
     - *Sub1
     - *Sub2
-    exclude-filter: *ExcludeFilter
+  exclude-filter: *ExcludeFilter
 
 # 策略组引用
 Proxy_groups: &Proxy_groups
