@@ -158,16 +158,16 @@ proxy-groups:
   - { name: 低倍, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(2).png", <<:  *fallb, filter: *FilterLowMag, hidden: true }
   - { name: 高倍, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(3).png", <<: *fallb, filter: *FilterHighMag, hidden: true }
 # 机场分组
-  - name: *Sub1
-    <<: *Selector
-    filter: *Sub1
-    icon: *Sub1Icon
-    hidden: true
-  - name: *Sub2
-    <<: *Selector
-    filter: *Sub2
-    icon: *Sub2Icon
-    hidden: true
+#  - name: *Sub1
+#    <<: *Selector
+#    filter: *Sub1
+#    icon: *Sub1Icon
+#    hidden: true
+#  - name: *Sub2
+#    <<: *Selector
+#    filter: *Sub2
+#    icon: *Sub2Icon
+#    hidden: true
     
 
 # 规则集
