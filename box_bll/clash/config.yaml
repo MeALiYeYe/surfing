@@ -159,8 +159,8 @@ proxy-groups:
   - { name: 美国_故障转移, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/US.png", <<: *fallb, filter: *FilterUS, exclude-filter: *FilterLowMag, hidden: true }
 #  - { name: 俄国_故障转移, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/RU.png", <<: *fallb, filter: *FilterRU, exclude-filter: *FilterLowMag, hidden: true }
   - { name: 其他_故障转移, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/quanqiu(3).png", <<: *fallb, filter: *FilterOther, exclude-filter: *FilterLowMag, hidden: true}
-  - { name: 低倍_故障转移, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(3).png", <<:  *fallb, filter: *FilterLowMag, hidden: true }
-  - { name: 高倍_故障转移, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(4).png", <<: *fallb, filter: *FilterHighMag, hidden: true }
+  - { name: 低倍_故障转移, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang.png", <<:  *fallb, filter: *FilterLowMag, hidden: true }
+  - { name: 高倍_故障转移, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(1).png", <<: *fallb, filter: *FilterHighMag, hidden: true }
 
 # 负载均衡分组(load-balance)
   - { name: 香港_负载均衡, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/HK.png", <<: *loads, filter: *FilterHK, exclude-filter: *FilterLowMag, hidden: true }  
@@ -171,8 +171,8 @@ proxy-groups:
   - { name: 美国_负载均衡, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/US.png", <<: *loads, filter: *FilterUS, exclude-filter: *FilterLowMag, hidden: true }
 #  - { name: 俄国_负载均衡, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/RU.png", <<: *loads, filter: *FilterRU, exclude-filter: *FilterLowMag, hidden: true }
   - { name: 其他_负载均衡, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/quanqiu(3).png", <<: *loads, filter: *FilterOther, exclude-filter: *FilterLowMag, hidden: true}
-  - { name: 低倍_负载均衡, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(3).png", <<:  *loads, filter: *FilterLowMag, hidden: true }
-  - { name: 高倍_负载均衡, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(4).png", <<: *loads, filter: *FilterHighMag, hidden: true }
+  - { name: 低倍_负载均衡, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang.png", <<:  *loads, filter: *FilterLowMag, hidden: true }
+  - { name: 高倍_负载均衡, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(1).png", <<: *loads, filter: *FilterHighMag, hidden: true }
 
 # 延迟最低分组(url-test)
   - { name: 香港_延迟最低, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/HK.png", <<: *auto, filter: *FilterHK, exclude-filter: *FilterLowMag, hidden: true }  
@@ -183,8 +183,8 @@ proxy-groups:
   - { name: 美国_延迟最低, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/US.png", <<: *auto, filter: *FilterUS, exclude-filter: *FilterLowMag, hidden: true }
 #  - { name: 俄国_延迟最低, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/RU.png", <<: *auto, filter: *FilterRU, exclude-filter: *FilterLowMag, hidden: true }
   - { name: 其他_延迟最低, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/quanqiu(3).png", <<: *auto, filter: *FilterOther, exclude-filter: *FilterLowMag, hidden: true}
-  - { name: 低倍_延迟最低, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(3).png", <<:  *auto, filter: *FilterLowMag, hidden: true }
-  - { name: 高倍_延迟最低, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(4).png", <<: *auto, filter: *FilterHighMag, hidden: true }
+  - { name: 低倍_延迟最低, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang.png", <<:  *auto, filter: *FilterLowMag, hidden: true }
+  - { name: 高倍_延迟最低, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(1).png", <<: *auto, filter: *FilterHighMag, hidden: true }
 
 # 固定节点(select)
   - { name: 香港_自选节点, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/HK.png", <<: *Selector, filter: *FilterHK, exclude-filter: *FilterLowMag, hidden: true }  
@@ -195,8 +195,8 @@ proxy-groups:
   - { name: 美国_自选节点, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/US.png", <<: *Selector, filter: *FilterUS, exclude-filter: *FilterLowMag, hidden: true }
 #  - { name: 俄国_自选节点, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/RU.png", <<: *auto, filter: *FilterRU, exclude-filter: *FilterLowMag, hidden: true }
   - { name: 其他_自选节点, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/quanqiu(3).png", <<: *Selector, filter: *FilterOther, exclude-filter: *FilterLowMag, hidden: true}
-  - { name: 低倍_自选节点, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(3).png", <<:  *Selector, filter: *FilterLowMag, hidden: true }
-  - { name: 高倍_自选节点, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(4).png", <<: *Selector, filter: *FilterHighMag, hidden: true }
+  - { name: 低倍_自选节点, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang.png", <<:  *Selector, filter: *FilterLowMag, hidden: true }
+  - { name: 高倍_自选节点, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(1).png", <<: *Selector, filter: *FilterHighMag, hidden: true }
   
   # 地区总分组
   - { name: 香港, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Hong_Kong.png", type: select, proxies: [ 香港_故障转移, 香港_负载均衡, 香港_延迟最低, 香港_自选节点 ]  }  
@@ -206,9 +206,9 @@ proxy-groups:
   - { name: 韩国, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Korea.png", type: select, proxies: [ 韩国_故障转移, 韩国_负载均衡, 韩国_延迟最低, 韩国_自选节点 ]  }  
   - { name: 美国, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/United_States.png", type: select, proxies: [ 美国_故障转移, 美国_负载均衡, 美国_延迟最低, 美国_自选节点 ]  }
 #  - { name: 俄国, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Russia.png", type: select, proxies: [ 俄国_故障转移, 俄国_负载均衡, 俄国_延迟最低, 俄国_自选节点 ]  }
-  - { name: 其他, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/quanqiu.png", type: select, proxies: [ 其他_故障转移, 其他_负载均衡, 其他_延迟最低, 其他_自选节点 ]  }
-  - { name: 低倍, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(1).png", type: select, proxies: [ 低倍_故障转移, 低倍_负载均衡, 低倍_延迟最低, 低倍_自选节点 ]   }
-  - { name: 高倍, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(2).png", type: select, proxies: [ 高倍_故障转移, 高倍_负载均衡, 高倍_延迟最低, 高倍_自选节点 ]   }
+  - { name: 其他, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/quanqiu(1).png", type: select, proxies: [ 其他_故障转移, 其他_负载均衡, 其他_延迟最低, 其他_自选节点 ]  }
+  - { name: 低倍, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(3).png", type: select, proxies: [ 低倍_故障转移, 低倍_负载均衡, 低倍_延迟最低, 低倍_自选节点 ]   }
+  - { name: 高倍, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/liuliang(4).png", type: select, proxies: [ 高倍_故障转移, 高倍_负载均衡, 高倍_延迟最低, 高倍_自选节点 ]   }
 # 机场分组
 #  - name: *Sub1
 #    <<: *Selector
