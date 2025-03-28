@@ -174,24 +174,24 @@ proxy-groups:
   - { name: VPN, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Server.png", <<: *Proxy_groups }
   - { name: Emby, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png", <<: *Proxy_groups }
   - { name: TikTok, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png", <<: *Proxy_groups }
-  - { name: Netflix, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png", <<: *Proxy_groups } 
+#  - { name: Netflix, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png", <<: *Proxy_groups } 
   - { name: YouTube, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png", <<: *Proxy_groups }
-  - { name: Facebook, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png", <<: *Proxy_groups }
-  - { name: Twitter, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png", <<: *Proxy_groups }
+#  - { name: Facebook, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png", <<: *Proxy_groups }
+#  - { name: Twitter, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png", <<: *Proxy_groups }
   - { name: Media, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ForeignMedia.png", <<: *Proxy_groups }
   - { name: Ai, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/ChatGPT-green.png", <<: *Proxy_groups }
   - { name: Telegram, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png", <<: *Proxy_groups }
   - { name: Google, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/google(1).png", <<: *Proxy_groups }
-  - { name: Cloudflare, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Cloudflare.png", <<: *Proxy_groups }
-  - { name: Github, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png", <<: *Proxy_groups }
+#  - { name: Cloudflare, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Cloudflare.png", <<: *Proxy_groups }
+#  - { name: Github, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png", <<: *Proxy_groups }
   - { name: Microsoft, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Microsoft.png", <<: *Proxy_groups } 
   - { name: Global, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Global.png", <<: *Proxy_groups }
   - { name: DomesticMedia, icon: "https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/DomesticMedia.png", <<: *Proxy_groups }
   - { name: Domestic, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Domestic.png", <<: *Proxy_groups }  
   - { name: Final, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png", <<: *Proxy_groups }
-  # 手动＆自动  
+  # 手动＆自动
+  - { name: 免流, icon: "https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Cellular.png", <<: *Freec }
   - { name: 自选, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/MY.png", <<: *Selector, hidden: true }
-  - { name: 免流, icon: "https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Cellular.png", <<: *Freec, hidden: true }
 #  - { name: 自动, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Auto.png", <<: *auto }
   # 分隔,下面是地区分组
   # 故障转移分组(fallback)
@@ -226,6 +226,7 @@ rules:
   - DST-PORT,53,DNS劫持
   - AND,((DST-PORT,443),(NETWORK,UDP)),REJECT-DROP   # 屏蔽QUIC 
 
+  - DOMAIN-REGEX,^beacons.*\.gvt\d\.com$,REJECT,REJECT-DROP
   - DOMAIN-REGEX,^ad\..*|ads\..*,REJECT-DROP
   - DOMAIN-REGEX,^hk[a-zA-Z0-9]*\.(?:weixin|wechat)(?:\.qq)?\.(?:com|qq\.com)$,香港
   - DOMAIN-REGEX,^sg[a-zA-Z0-9]*\.(?:weixin|wechat)(?:\.qq)?\.(?:com|qq\.com)$,狮城
@@ -237,44 +238,28 @@ rules:
 #  - RULE-SET,advertising,REJECT-DROP
 #  - RULE-SET,秋风广告规则,REJECT-DROP 
 
-  - GEOSITE,private,直连
-  - GEOSITE,googlefcm,直连
   - GEOSITE,category-ads-all,REJECT-DROP
   - GEOSITE,category-httpdns-cn,REJECT-DROP
-  - GEOSITE,win-spy,REJECT-DROP
-  - GEOSITE,win-update,REJECT-DROP
-  - GEOSITE,win-extra,REJECT-DROP
+  - OR,((GEOSITE,win-spy),(GEOSITE,win-update),(GEOSITE,win-extra)),REJECT-DROP
+  - GEOSITE,private,直连
+  - GEOSITE,googlefcm,直连
   - GEOSITE,youtube,YouTube
-  - GEOSITE,netflix,Netflix
   - GEOSITE,tiktok,TikTok
-  - GEOSITE,category-media,Media
-  - GEOSITE,facebook,Facebook
-  - GEOSITE,twitter,Twitter
+  - GEOSITE,category-entertainment,Media
   - GEOSITE,telegram,Telegram
   - GEOSITE,google,Google
-  - GEOSITE,cloudflare,Cloudflare
   - GEOSITE,category-ai-chat-!cn,Ai
-  - GEOSITE,github,Github
-  - GEOSITE,bing,Microsoft
-  - GEOSITE,onedrive,Microsoft
-  - GEOSITE,microsoft,Microsoft
+  - OR,((GEOSITE,github),(GEOSITE,bing),(GEOSITE,onedrive),(GEOSITE,microsoft)),Microsoft
   - GEOSITE,geolocation-!cn,Global
-  - GEOSITE,bilibili,DomesticMedia
-  - GEOSITE,bytedance,DomesticMedia
-  - GEOSITE,douyu,DomesticMedia
-  - GEOSITE,huya,DomesticMedia
   - GEOSITE,sina,DomesticMedia
   - GEOSITE,zhihu,DomesticMedia
+  - GEOSITE,bytedance,DomesticMedia
   - GEOSITE,category-entertainment-cn,DomesticMedia
   - GEOSITE,cn,Domestic 
    
   - GEOIP,private,直连,no-resolve
-  - GEOIP,netflix,Netflix,no-resolve
-  - GEOIP,facebook,Facebook,no-resolve
-  - GEOIP,twitter,Twitter,no-resolve
   - GEOIP,telegram,Telegram,no-resolve
   - GEOIP,google,Google,no-resolve
-  - GEOIP,cloudflare,Cloudflare,no-resolve
   - GEOIP,cn,Domestic,no-resolve
 
   - MATCH,Final
@@ -375,6 +360,7 @@ hosts:
     - 185.199.111.133
     - 2606:50c0:8000::154
     - 2606:50c0:8001::154
+    - 2606:50c0:8003::154
     - 2606:50c0:8002::154
 
 # DNS模块
