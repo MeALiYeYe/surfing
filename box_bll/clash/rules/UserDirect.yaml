@@ -1,0 +1,3 @@
+payload:
+  - DOMAIN,kahaoquan.com
+  - DOMAIN-REGEX,^(?i).*?(imap|smtp).*?\.(qq\.com|163\.com|foxmail\.com|189\.cn|126\.com|sina\.(?:com\.cn|cn)|aliyun\.com|yeah\.net|139\.com|wo\.cn|21cn\.com)$
