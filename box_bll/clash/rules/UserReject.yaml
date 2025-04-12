@@ -1,5 +1,25 @@
 payload:
-  - AND,((DST-PORT,443),(NETWORK,UDP))
+  - AND,((DST-PORT,443),(NETWORK,UDP))    #屏蔽QUIC
+  - DOMAIN,dumall.baidu.com
+  - DOMAIN,haokan.baidu.com
+  - DOMAIN,yingxiao.baidu.com
+  - DOMAIN,e.baidu.com
+  - DOMAIN,jiankang.baidu.com
+  - DOMAIN,news.baidu.com
+  - DOMAIN,xueshu.baidu.com
+  - DOMAIN,baijiahao.baidu.com
+  - DOMAIN,anquan.baidu.com
+  - DOMAIN,wan.baidu.com
+  - DOMAIN-SUFFIX,duxiaoman.com
+  - DOMAIN-SUFFIX,dxmpay.com
+  - DOMAIN-SUFFIX,2345.com
+  - DOMAIN-SUFFIX,hao123.com
+  - DOMAIN-SUFFIX,360.cn
+  - DOMAIN-SUFFIX,so.com
+  - DOMAIN-SUFFIX,qifu.tech
+  - DOMAIN-SUFFIX,xjietiao.com
+  - DOMAIN-SUFFIX,360jie.com.cn
+  - DOMAIN-SUFFIX,360totalsecurity.com
   - DOMAIN-REGEX,^ad\..*|^ads\..*/
   - DOMAIN-REGEX,^beacons.*\.gvt\d\.com$
   - IP-CIDR,95.161.76.100/31,no-resolve
