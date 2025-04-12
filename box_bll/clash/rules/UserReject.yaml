@@ -1,4 +1,4 @@
-.payload:
+payload:
   - AND,((DST-PORT,443),(NETWORK,UDP))
   - DOMAIN-REGEX,^ad\..*|^ads\..*/
   - DOMAIN-REGEX,^beacons.*\.gvt\d\.com$
