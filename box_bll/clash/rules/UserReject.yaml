@@ -1,5 +1,5 @@
 .payload:
-  -AND,((DST-PORT,443),(NETWORK,UDP))
+  - AND,((DST-PORT,443),(NETWORK,UDP))
   - DOMAIN-REGEX,^ad\..*|^ads\..*/
   - DOMAIN-REGEX,^beacons.*\.gvt\d\.com$
   - IP-CIDR,95.161.76.100/31,no-resolve
