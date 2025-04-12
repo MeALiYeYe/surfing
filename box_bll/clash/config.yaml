@@ -140,9 +140,7 @@ yunpan: &yunpan
     Host: 153.3.236.22:443
     Connection: Keep-Alive
     With-At: download.cloud.189.cn
-
-#锚点结束
-###############
+###############锚点结束###############
 
 # 出站代理
 proxies:
@@ -183,11 +181,11 @@ proxy-groups:
   - { name: ADBlock, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png", type: select, proxies: [REJECT-DROP, DIRECT] }
   - { name: Emby, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png", <<: *Proxy_groups }
   - { name: TikTok, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png", <<: *Proxy_groups }
-#  - { name: Netflix, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png", <<: *Proxy_groups } 
+  - { name: Netflix, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png", <<: *Proxy_groups } 
   - { name: YouTube, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png", <<: *Proxy_groups }
-#  - { name: Facebook, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png", <<: *Proxy_groups }
-#  - { name: Twitter, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png", <<: *Proxy_groups }
-#  - { name: Spotify, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png", <<: *Proxy_groups }
+  - { name: Spotify, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png", <<: *Proxy_groups }
+  - { name: Facebook, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png", <<: *Proxy_groups }
+  - { name: Twitter, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png", <<: *Proxy_groups }
   - { name: Media, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ForeignMedia.png", <<: *Proxy_groups }
   - { name: Ai, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/ChatGPT-green.png", <<: *Proxy_groups }
   - { name: Telegram, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png", <<: *Proxy_groups }
@@ -223,26 +221,25 @@ proxy-groups:
     <<: *Selector
     filter: *Sub2
     icon: *Sub2Icon
-    
+
 # 规则集
 rule-providers:
-  秋风广告规则: { <<: *dom, format: yaml, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.yaml", path: ./rules/AWAvenue.yaml }
+  秋风广告规则: { <<: *dom, format: yaml, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.yaml", path: ./rules/秋风广告规则.yaml }
+  直连规则: { <<: *cla, format: yaml, url: "https://raw.githubusercontent.com/MeALiYeYe/surfing/refs/heads/main/box_bll/clash/rules/UserDirect.yaml", path: ./rules/直连规则.yaml }
+  拦截规则: { <<: *cla, format: yaml, url: "https://raw.githubusercontent.com/MeALiYeYe/surfing/refs/heads/main/box_bll/clash/rules/UserReject.yaml", path: ./rules/拦截规则.yaml }
+  代理规则: { <<: *cla, format: yaml, url: "https://raw.githubusercontent.com/MeALiYeYe/surfing/refs/heads/main/box_bll/clash/rules/UserProxy.yaml", path: ./rules/代理规则.yaml }
 #  advertising: { <<: *cla, format: yaml, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Advertising/Advertising_Classical_No_Resolve.yaml", path: ./rules/advertising.yaml }
-#  GoogleFCM: { <<: *cla, format: yaml, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/GoogleFCM/GoogleFCM_No_Resolve.yaml", path: ./rules/GoogleFCM.yaml }
 
 # 路由规则
 rules:
   - DST-PORT,53,DNS劫持
-  - AND,((DST-PORT,443),(NETWORK,UDP)),REJECT-DROP # 屏蔽QUIC 
-
-  - DOMAIN-REGEX,^ad\..*|^ads\..*,ADBlock
-  - DOMAIN-REGEX,^beacons.*\.gvt\d\.com$,ADBlock
   - OR,((DOMAIN-SUFFIX,cn2gias.uk),(DOMAIN,random.ouonet.org)),Emby
-  - DOMAIN-SUFFIX,metacubex.one,Global
-  - DOMAIN,board.zash.run.place,Global
 
-  - RULE-SET,秋风广告规则,ADBlock  
-#  - RULE-SET,advertising,REJECT-DROP
+  - RULE-SET,拦截规则,ADBlock
+  - RULE-SET,直连规则,DIRECT
+  - RULE-SET,代理规则,Global
+  - RULE-SET,秋风广告规则,ADBlock
+#  - RULE-SET,advertising,ADBlock
 
   - GEOSITE,category-ads-all,ADBlock
   - GEOSITE,category-httpdns-cn,ADBlock
@@ -250,9 +247,12 @@ rules:
   - GEOSITE,category-companies@cn,Domestic
   - GEOSITE,youtube,YouTube
   - GEOSITE,tiktok,TikTok
+  - GEOSITE,netflix,Netflix
+  - GEOSITE,spotify,Spotify
   - GEOSITE,category-entertainment,Media
+  - GEOSITE,twitter,Twitter
   - GEOSITE,telegram,Telegram
-  - GEOSITE,googlefcm,直连
+  - GEOSITE,facebook,Facebook
   - GEOSITE,google,Google
   - GEOSITE,cloudflare,Cloudflare
   - GEOSITE,category-ai-chat-!cn,Ai
@@ -266,6 +266,9 @@ rules:
   - GEOSITE,cn,Domestic 
    
   - GEOIP,private,直连,no-resolve
+  - GEOIP,netflix,Netflix,no-resolve
+  - GEOIP,facebook,Facebook,no-resolve
+  - GEOIP,twitter,Twitter,no-resolve
   - GEOIP,telegram,Telegram,no-resolve
   - GEOIP,google,Google,no-resolve
   - GEOIP,cloudflare,Cloudflare,no-resolve
@@ -285,14 +288,10 @@ geodata-mode: true
 geo-auto-update: true
 geo-update-interval: 168
 geox-url:
-#  geoip: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat"
-  geoip: "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat"
-#  geosite: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
-  geosite: "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat"
-#  mmdb: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/country.mmdb"
-  mmdb: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb"
-#  asn: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb"
-  asn: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-ASN.mmdb"
+  geoip: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat"
+  geosite: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
+  mmdb: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/country.mmdb"
+  asn: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb"
 
 unified-delay: true
 tcp-concurrent: true
@@ -310,7 +309,7 @@ profile:
   store-selected: true
   store-fake-ip: true
 
-# 嗅探模块
+# 域名嗅探
 sniffer:
   enable: true
   force-dns-mapping: true
@@ -343,7 +342,7 @@ sniffer:
     - "172.16.0.0/12"
     - "fc00::/7"
 
-# 虚拟网卡服务
+# Tunnel配置
 tun:
   enable: false
   device: Mihomo
@@ -375,7 +374,7 @@ hosts:
     - 2606:50c0:8002::154
     - 2606:50c0:8003::154
 
-# DNS模块
+# DNS配置
 dns:
   enable: true
   listen: :1053
