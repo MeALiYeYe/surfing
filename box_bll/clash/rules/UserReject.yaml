@@ -22,4 +22,5 @@ payload:
   - DOMAIN-SUFFIX,360totalsecurity.com
   - DOMAIN-REGEX,^ad\..*|^ads\..*/
   - DOMAIN-REGEX,^beacons.*\.gvt\d\.com$
-  - IP-CIDR,95.161.76.100/31,no-resolve
+  - IP-CIDR,95.161.76.100/31,no-resolve  #防止电报转圈
+  - IP-CIDR,198.18.0.0/15,no-resolve  #确保DNS的fake-ip地址不被用于伪造的该地址段的外部网络
