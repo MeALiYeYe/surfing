@@ -24,7 +24,7 @@ FilterHighMag: &FilterHighMag '(?!0\.)[1-9]\d*(?:\.\d+)'            #高倍率�
 # 订阅更新与测试
 Proxyer: &Proxyer
     type: http
-    interval: 43200
+    interval: 3600
     health-check:
       enable: true
       url: *ProxyTestUrl
@@ -140,7 +140,7 @@ yunpan: &yunpan
     Host: 153.3.236.22:443
     Connection: Keep-Alive
     With-At: download.cloud.189.cn
-###############锚点结束###############
+#############锚点结束###########
 
 # 出站代理
 proxies:
@@ -178,7 +178,7 @@ proxy-providers:
 
 # 策略组
 proxy-groups:
-  - { name: ADBlock, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png", type: select, proxies: [REJECT-DROP, DIRECT] }
+  - { name: ADBlock, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",  type: select, proxies: [ REJECT-DROP, DIRECT ] }
   - { name: Emby, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png", <<: *Proxy_groups }
   - { name: TikTok, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png", <<: *Proxy_groups }
   - { name: Netflix, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png", <<: *Proxy_groups } 
@@ -192,10 +192,10 @@ proxy-groups:
   - { name: Google, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/google(1).png", <<: *Proxy_groups }
   - { name: Cloudflare, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Cloudflare.png", <<: *Proxy_groups }
   - { name: Github, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png", <<: *Proxy_groups }
-  - { name: Microsoft, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Microsoft.png", <<: *Proxy_groups } 
+  - { name: Microsoft, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Microsoft.png", <<: *Proxy_groups }
   - { name: Global, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Global.png", <<: *Proxy_groups }
   - { name: Redirect, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/refs/heads/main/icon/direct.png", <<: *Proxy_groups }
-  - { name: Domestic, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Domestic.png", <<: *Proxy_groups }  
+  - { name: Domestic, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Domestic.png", <<: *Proxy_groups }
   - { name: Final, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png", <<: *Proxy_groups }
   # 手动＆自动
   - { name: 免流, icon: "https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Cellular.png", <<: *Freec }
@@ -284,6 +284,7 @@ tproxy-port: 1536
 ipv6: true
 mode: Rule
 allow-lan: true
+bind-address: "*"
 geodata-mode: true
 geo-auto-update: true
 geo-update-interval: 168
@@ -325,26 +326,11 @@ sniffer:
   force-domain:
     - "+.v2ex.com"
   skip-domain:
-    - "geosite:private"
-    - "+.push.apple.com"
-    - "*.cdn.net"
-    - "*.akamai.net"
-    - "*.amazonaws.com"
     - "Mijia Cloud"
-  skip-src-address:
-    - "192.168.0.3/32"
-    - "10.0.0.0/8"
-    - "172.16.0.0/12"
-    - "fc00::/7"
-  skip-dst-address:
-    - "192.168.0.3/32"
-    - "10.0.0.0/8"
-    - "172.16.0.0/12"
-    - "fc00::/7"
 
 # Tunnel配置
 tun:
-  enable: false
+  enable: true
   device: Mihomo
   stack: mixed
   dns-hijack:
@@ -363,6 +349,7 @@ tun:
     - fc00::/7
     - fe80::/10
 
+# hosts在fake-ip下不生效
 hosts:
   raw.githubusercontent.com:
     - 185.199.108.133
@@ -386,12 +373,13 @@ dns:
     - 'geosite:cn,private'
     - 'localhost.ptlogin2.qq.com'
   proxy-server-nameserver:
-    - 'https://dns.alidns.com/dns-query#h3=true'
+    - 'https://dns.alidns.com/dns-query#Domestic&h3=true'
   direct-nameserver:
-    - 'https://dns.alidns.com/dns-query#h3=true'
+    - 'https://dns.alidns.com/dns-query#Domestic&h3=true'
   nameserver-policy:
-    'geosite:cn,private,apple,googlefcm':
-      - 'https://dns.alidns.com/dns-query#h3=true'
+    'geosite:category-ads-all': rcode://success
+    'geosite:cn,private,apple,microsoft':
+      - 'https://dns.alidns.com/dns-query#Domestic&h3=true'
   nameserver:
-   - 'https://dns.google/dns-query#h3=true'
-   - 'https://cloudflare-dns.com/dns-query#h3=true'
+    - 'https://dns.google/dns-query#Google&h3=true'
+    - 'https://dns.cloudflare.com/dns-query#Cloudflare&h3=true'
