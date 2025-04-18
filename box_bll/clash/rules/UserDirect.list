@@ -1,6 +1,6 @@
-DOMAIN-SUFFIX,kahaoquan.com
-DOMAIN,xiaoyakankan.com
-OR,((DOMAIN-SUFFIX,gwmapp-h.com),(DOMAIN-SUFFIX,gwm.com.cn),(DOMAIN-SUFFIX,gwm.cn),(DOMAIN-KEYWORD,gwm-mn),(DOMAIN-KEYWORD,gwmapp))
+DOMAIN-KEYWORD,kahaoquan
+DOMAIN-KEYWORD,xiaoyakankan
+OR,((DOMAIN-SUFFIX,gwm.com.cn),(DOMAIN-SUFFIX,gwm.cn),(DOMAIN-KEYWORD,gwm-mn),(DOMAIN-KEYWORD,gwmapp))
 # GoogleFCM
 DOMAIN,alt1-mtalk.google.com
 DOMAIN,alt2-mtalk.google.com
