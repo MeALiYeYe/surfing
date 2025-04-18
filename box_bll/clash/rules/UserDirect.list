@@ -1,6 +1,5 @@
 DOMAIN,kahaoquan.com
 DOMAIN,xiaoyakankan.com
-# 国内邮箱
 OR,((DOMAIN-SUFFIX,gwmapp-h.com),(DOMAIN-SUFFIX,gwm.com.cn),(DOMAIN-SUFFIX,gwm.cn),(DOMAIN-KEYWORD,gwm-mn),(DOMAIN-KEYWORD,gwmapp))
 # GoogleFCM
 DOMAIN,alt1-mtalk.google.com
