@@ -1,5 +1,11 @@
 # 屏蔽QUIC
 # AND,((DST-PORT,443),(NETWORK,UDP))
+DOMAIN-SUFFIX,beacons2.gvt2.com
+DOMAIN-SUFFIX,beacons3.gvt2.com
+DOMAIN-SUFFIX,beacons4.gvt2.com
+DOMAIN-SUFFIX,beacons5.gvt2.com
+DOMAIN-SUFFIX,beacons6.gvt2.com
+DOMAIN-SUFFIX,beacons7.gvt2.com
 DOMAIN,dumall.baidu.com
 DOMAIN,haokan.baidu.com
 DOMAIN,yingxiao.baidu.com
