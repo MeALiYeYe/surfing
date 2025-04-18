@@ -1,5 +1,5 @@
 # 屏蔽QUIC
-AND,((DST-PORT,443),(NETWORK,UDP))
+# AND,((DST-PORT,443),(NETWORK,UDP))
 DOMAIN,dumall.baidu.com
 DOMAIN,haokan.baidu.com
 DOMAIN,yingxiao.baidu.com
@@ -20,8 +20,6 @@ DOMAIN-SUFFIX,qifu.tech
 DOMAIN-SUFFIX,xjietiao.com
 DOMAIN-SUFFIX,360jie.com.cn
 DOMAIN-SUFFIX,360totalsecurity.com
-DOMAIN-REGEX,^ad\..*|^ads\..*/
-DOMAIN-REGEX,^beacons.*\.gvt\d\.com$
 # 防止电报转圈
 IP-CIDR,95.161.76.100/31,no-resolve
 # 确保DNS的fake-ip地址不被用于伪造的该地址段的外部网络
