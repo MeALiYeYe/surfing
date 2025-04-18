@@ -1,9 +1,9 @@
-- DOMAIN,kahaoquan.com
-- DOMAIN,xiaoyakankan.com
+DOMAIN,kahaoquan.com
+DOMAIN,xiaoyakankan.com
 # 国内邮箱
-- DOMAIN-REGEX,^(?i).*?(imap|smtp).*?\.(qq\.com|163\.com|foxmail\.com|189\.cn|126\.com|sina\.(?:com\.cn|cn)|aliyun\.com|yeah\.net|139\.com|wo\.cn|21cn\.com)$
-- OR,((DOMAIN-SUFFIX,gwmapp-h.com),(DOMAIN-SUFFIX,gwm.com.cn),(DOMAIN-SUFFIX,gwm.cn),(DOMAIN-KEYWORD,gwm-mn),(DOMAIN-KEYWORD,gwmapp))
+DOMAIN-REGEX,^(?i).*?(imap|smtp).*?\.(qq\.com|163\.com|foxmail\.com|189\.cn|126\.com|sina\.(?:com\.cn|cn)|aliyun\.com|yeah\.net|139\.com|wo\.cn|21cn\.com)$
+OR,((DOMAIN-SUFFIX,gwmapp-h.com),(DOMAIN-SUFFIX,gwm.com.cn),(DOMAIN-SUFFIX,gwm.cn),(DOMAIN-KEYWORD,gwm-mn),(DOMAIN-KEYWORD,gwmapp))
 # GoogleFCM
-- DST-PORT,5228
+DST-PORT,5228
 # 对于一些对战游戏因为都是基于UDP，开启此选项后可避免一些延迟。
-- PROTOCOL,UDP,DIRECT
+PROTOCOL,UDP,DIRECT
