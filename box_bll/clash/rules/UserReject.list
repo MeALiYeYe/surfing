@@ -1,30 +1,30 @@
 # 屏蔽QUIC
-- AND,((DST-PORT,443),(NETWORK,UDP))
-- DOMAIN,dumall.baidu.com
-- DOMAIN,haokan.baidu.com
-- DOMAIN,yingxiao.baidu.com
-- DOMAIN,e.baidu.com
-- DOMAIN,jiankang.baidu.com
-- DOMAIN,news.baidu.com
-- DOMAIN,xueshu.baidu.com
-- DOMAIN,baijiahao.baidu.com
-- DOMAIN,anquan.baidu.com
-- DOMAIN,wan.baidu.com
-- DOMAIN-SUFFIX,duxiaoman.com
-- DOMAIN-SUFFIX,dxmpay.com
-- DOMAIN-SUFFIX,2345.com
-- DOMAIN-SUFFIX,hao123.com
-- DOMAIN-SUFFIX,360.cn
-- DOMAIN-SUFFIX,so.com
-- DOMAIN-SUFFIX,qifu.tech
-- DOMAIN-SUFFIX,xjietiao.com
-- DOMAIN-SUFFIX,360jie.com.cn
-- DOMAIN-SUFFIX,360totalsecurity.com
-- DOMAIN-REGEX,^ad\..*|^ads\..*/
-- DOMAIN-REGEX,^beacons.*\.gvt\d\.com$
+AND,((DST-PORT,443),(NETWORK,UDP))
+DOMAIN,dumall.baidu.com
+DOMAIN,haokan.baidu.com
+DOMAIN,yingxiao.baidu.com
+DOMAIN,e.baidu.com
+DOMAIN,jiankang.baidu.com
+DOMAIN,news.baidu.com
+DOMAIN,xueshu.baidu.com
+DOMAIN,baijiahao.baidu.com
+DOMAIN,anquan.baidu.com
+DOMAIN,wan.baidu.com
+DOMAIN-SUFFIX,duxiaoman.com
+DOMAIN-SUFFIX,dxmpay.com
+DOMAIN-SUFFIX,2345.com
+DOMAIN-SUFFIX,hao123.com
+DOMAIN-SUFFIX,360.cn
+DOMAIN-SUFFIX,so.com
+DOMAIN-SUFFIX,qifu.tech
+DOMAIN-SUFFIX,xjietiao.com
+DOMAIN-SUFFIX,360jie.com.cn
+DOMAIN-SUFFIX,360totalsecurity.com
+DOMAIN-REGEX,^ad\..*|^ads\..*/
+DOMAIN-REGEX,^beacons.*\.gvt\d\.com$
 # 防止电报转圈
-- IP-CIDR,95.161.76.100/31,no-resolve
+IP-CIDR,95.161.76.100/31,no-resolve
 # 确保DNS的fake-ip地址不被用于伪造的该地址段的外部网络
-- IP-CIDR,198.18.0.0/15,no-resolve
+IP-CIDR,198.18.0.0/15,no-resolve
 # 阻止电报频繁请求
-- AND,((PROCESS-NAME,Telegram),(OR,((IP-CIDR,0.0.0.0/8),(IP-CIDR,224.0.0.0/4))))
+AND,((PROCESS-NAME,Telegram),(OR,((IP-CIDR,0.0.0.0/8),(IP-CIDR,224.0.0.0/4))))
