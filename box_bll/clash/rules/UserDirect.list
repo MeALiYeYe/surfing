@@ -1,4 +1,4 @@
-DOMAIN,kahaoquan.com
+DOMAIN-SUFFIX,kahaoquan.com
 DOMAIN,xiaoyakankan.com
 OR,((DOMAIN-SUFFIX,gwmapp-h.com),(DOMAIN-SUFFIX,gwm.com.cn),(DOMAIN-SUFFIX,gwm.cn),(DOMAIN-KEYWORD,gwm-mn),(DOMAIN-KEYWORD,gwmapp))
 # GoogleFCM
