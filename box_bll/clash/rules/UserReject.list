@@ -27,3 +27,6 @@ IP-CIDR,95.161.76.100/31,no-resolve
 IP-CIDR,198.18.0.0/15,no-resolve
 # 阻止电报频繁请求
 AND,((PROCESS-NAME,Telegram),(OR,((IP-CIDR,0.0.0.0/8,no-resolve),(IP-CIDR,224.0.0.0/4,no-resolve))))
+# 防止本地流量回环
+- IP-CIDR,0.0.0.0/32,REJECT
+- IP-CIDR,::/128,REJECT
