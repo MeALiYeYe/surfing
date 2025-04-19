@@ -1,0 +1,5 @@
+# 防止本地流量回环
+IP-CIDR,0.0.0.0/32,no-resolve
+IP-CIDR,::/128,no-resolve
+# 确保DNS的fake-ip地址不被用于伪造的该地址段的外部网络
+IP-CIDR,198.18.0.0/15,no-resolve
