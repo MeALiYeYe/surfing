@@ -1,9 +1,7 @@
 # 防止流量回环
 IP-CIDR,0.0.0.0/32,no-resolve
 IP-CIDR6,::/128,no-resolve
-# 屏蔽QUIC
-# AND,((DST-PORT,443),(NETWORK,UDP))
-AND,((OR,((DOMAIN-SUFFIX,gvt2.com),(DOMAIN-SUFFIX,gvt3.com))),(DOMAIN-KEYWORD,beacons))
+AND,((DOMAIN-KEYWORD,gvt),(DOMAIN-KEYWORD,beacons))
 DOMAIN,dumall.baidu.com
 DOMAIN,haokan.baidu.com
 DOMAIN,yingxiao.baidu.com
