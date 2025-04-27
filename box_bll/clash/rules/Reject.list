@@ -2,7 +2,6 @@
 IP-CIDR,0.0.0.0/32,no-resolve
 IP-CIDR6,::/128,no-resolve
 # 确保migomo fake-ip地址不被用于伪造的该地址段的外部网络
-IP-CIDR,198.18.0.0/15,no-resolve
 AND,((DOMAIN-KEYWORD,gvt),(DOMAIN-KEYWORD,beacons))
 DOMAIN,dumall.baidu.com
 DOMAIN,haokan.baidu.com
