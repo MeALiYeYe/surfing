@@ -1,6 +1,4 @@
 # 防止流量回环
-IP-CIDR,0.0.0.0/32,no-resolve
-IP-CIDR6,::/128,no-resolve
 AND,((DOMAIN-KEYWORD,gvt),(DOMAIN-KEYWORD,beacons))
 DOMAIN,dumall.baidu.com
 DOMAIN,haokan.baidu.com
